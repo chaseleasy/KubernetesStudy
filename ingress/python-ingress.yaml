@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pymain
+
+spec: 
+  template:
+    metadata: 
+      name: pymain
+      labels: 
+        app: pymain-pod
+    spec:
+      containers:
+        - image: chaseleasy/pymain:v3
+          name: pymain-container
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: pymain-service
+spec:
+   selector:
+     app: pymain-pod
+   ports:
+     - port: 80 
+       targetPort: 80 
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pymain-ingress
+spec:
+  rules:
+    - host: pymain.nginx-ingress.com
+      http:
+        paths:
+          - backend:
+             serviceName: pymain-service
+             servicePort: 80

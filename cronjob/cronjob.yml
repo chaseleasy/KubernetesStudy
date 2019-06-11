@@ -1,0 +1,19 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: pythoncron
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            cron: python
+        spec:
+          restartPolicy: OnFailure
+          StartingDeadlineSeconds: 5
+          containers: 
+            - name: pymain-cron
+              image: chaseleasy/pymain:v1 
+

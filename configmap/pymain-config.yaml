@@ -1,0 +1,8 @@
+apiVersion: v1
+metadata:
+  name: pymain-config
+kind: ConfigMap
+data: 
+  tutu: "im is tutu 6666"
+  anqila: "im is anqila"
+  lanlingwang: "im is lanlingwang "
