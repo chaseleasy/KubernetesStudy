@@ -1,0 +1,82 @@
+
+### 
+#kubectl -n kube-system  create secret tls ingress-secret --key tls/dashboard.key --cert tls/dashboard.crt 
+# 1. 首先增加证书 让他不要自己签发证书
+# 2. 然后yaml啪次 执行一下
+# 3. 然后上去就可以了 
+
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pymain
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  # 这里生成了 很多pod 都是基于这个名称的
+  name: pymain-rs
+  namespace: pymain
+  labels:
+    app: pymain-rs
+spec:
+  replicas: 3
+  selector: 
+    matchExpressions:
+     - key: app
+       operator: In
+       values:
+         - pymain
+  template:
+    metadata:
+      labels:
+        app: pymain
+      # ports labels
+    spec:
+      containers:
+        - name: pymain-pod
+        # port name 
+          readinessProbe:
+            exec:
+              command:
+                - ls
+                - var/ready
+          image: chaseleasy/pymain:v3
+          ports:
+            - name: http
+              containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: pymain-service
+  namespace: pymain
+  labels:
+    app: pymain-service
+spec:
+  # 端口映射
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  # 通过这个标签选择器 选择pod
+  selector:
+    app: pymain
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata: 
+  name: pymain-ingress
+  namespace: pymain
+  labels: 
+    app: pymain-ingress
+spec:
+  rules:
+    - host: k8s.chunqiucp6.com
+      http:
+        paths:
+          - backend: 
+              serviceName: pymain-service
+              servicePort: 80

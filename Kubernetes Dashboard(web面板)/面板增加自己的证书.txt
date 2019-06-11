@@ -1,0 +1,4 @@
+#kubectl -n kube-system  create secret tls ingress-secret --key tls/dashboard.key --cert tls/dashboard.crt 
+# 1. 首先增加证书 让他不要自己签发证书
+# 2. 然后yaml啪次 执行一下
+# 3. 然后上去就可以了 

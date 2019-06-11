@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  # 这里生成了 很多pod 都是基于这个名称的
+  name: im-pod-name
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector: 
+    matchExpressions:
+     - key: app
+       operator: In
+       values:
+         - kubia 
+  template:
+    metadata:
+      labels:
+        app: kubia
+      # ports labels
+    spec:
+      containers:
+        - name: niubipod
+        # port name 
+          image: chaseleasy/pymain:v3
+          ports:
+            - name: http
+              containerPort: 80

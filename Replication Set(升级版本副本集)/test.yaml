@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: youyou
+  labels:
+    app: kubia
+    tutu: tutu11
+spec:
+  containers:
+    - name: youyou
+      image: chaseleasy/pymain:v1

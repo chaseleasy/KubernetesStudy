@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubia-liveness
+spec:
+  containers:
+  - image: chaseleasy/pymain:v1
+    name: kubia
+    livenessProbe:
+      httpGet:
+        path: /mysqlconnect
+        port: 80
+      initialDelaySeconds: 15
+
